@@ -38,7 +38,6 @@ async function main(): Promise<void> {
   checkEnvironmentVariables();
 
   console.log('✓ Environment variables validated successfully');
-  console.log('OEJP Email:', process.env.OEJP_EMAIL);
   
   // The rest of the CLI logic will go here
   console.log('\n🚧 CLI logic not yet implemented - this is left for future development');
