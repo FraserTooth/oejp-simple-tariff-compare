@@ -1,0 +1,15 @@
+{
+  "name": "oejp-simple-tariff-compare",
+  "version": "0.1.0",
+  "type": "module",
+  "bin": {
+    "oejp-tariff": "./index.ts"
+  },
+  "scripts": {
+    "start": "bun run index.ts"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/bun": "latest"
+  }
+}
