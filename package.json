@@ -1,0 +1,23 @@
+{
+  "name": "oejp-simple-tariff-compare",
+  "version": "0.1.0",
+  "type": "module",
+  "bin": {
+    "oejp-tariff": "./index.ts"
+  },
+  "scripts": {
+    "start": "bun run index.ts",
+    "build": "bun build ./index.ts --compile --outfile oejp-simple-tariff-compare",
+    "release": "bash release.sh"
+  },
+  "dependencies": {
+    "@types/prompts": "^2.4.9",
+    "commander": "^14.0.3",
+    "ora": "^9.3.0",
+    "prompts": "^2.4.2"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "apollo": "^2.34.0"
+  }
+}

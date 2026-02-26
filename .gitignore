@@ -1,0 +1,18 @@
+# Environment variables
+.env
+oejp-simple-tariff-compare
+
+# Dependencies
+node_modules/
+bun.lockb
+
+# Build outputs
+dist/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Dev Stuff
+schema.json
