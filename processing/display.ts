@@ -3,19 +3,20 @@ import { calculateCurrentTariffCarbonIntensity, calculateSimpleTariffCarbonInten
 
 
 export const displayComparisonResults = (comparison: BillComparisonResult): void => {
+    console.log('\n');
     // Header with rate information - note that renewable surcharge is automatically added (~3¥/kWh per month)
     console.log('📊 TARIFF COMPARISON (Base Rate: ¥' + comparison.rate.toFixed(2) + '/kWh + renewable surcharge)');
 
     // Monthly comparison table
     const MONTH_WIDTH = 7;
     const KWH_WIDTH = 4;
-    const RATE_WIDTH = 7;
-    const ACTUAL_WIDTH = 12;
-    const SIMPLE_WIDTH = 12;
+    const RATE_WIDTH = 6;
+    const ACTUAL_WIDTH = 9;
+    const SIMPLE_WIDTH = 9;
     const MONEY_WIDTH = 22;
-    const CARBON_WIDTH = 15;
+    const CARBON_WIDTH = 10;
 
-    console.log(`${'Month'.padEnd(MONTH_WIDTH)} | ${'kWh'.padEnd(KWH_WIDTH)} | ${'Rate'.padEnd(RATE_WIDTH)} | ${'Actual'.padEnd(ACTUAL_WIDTH)} | ${'Simple'.padEnd(SIMPLE_WIDTH)} | ${'Difference'.padEnd(MONEY_WIDTH)}  | ${'Carbon Saving'.padEnd(CARBON_WIDTH)}`);
+    console.log(`${'Month'.padEnd(MONTH_WIDTH)} | ${'kWh'.padEnd(KWH_WIDTH)} | ${'Rate'.padEnd(RATE_WIDTH)} | ${'Actual'.padEnd(ACTUAL_WIDTH)} | ${'Simple'.padEnd(SIMPLE_WIDTH)} | ${'Difference'.padEnd(MONEY_WIDTH)}  | ${'CO2 Saved'.padEnd(CARBON_WIDTH)}`);
     console.log(`${'-'.repeat(MONTH_WIDTH)}-+-${'-'.repeat(KWH_WIDTH)}-+-${'-'.repeat(RATE_WIDTH)}-+-${'-'.repeat(ACTUAL_WIDTH)}-+-${'-'.repeat(SIMPLE_WIDTH)}-+-${'-'.repeat(MONEY_WIDTH)}--+-${'-'.repeat(CARBON_WIDTH)}`);
 
     for (const comp of comparison.comparisons) {
@@ -32,17 +33,18 @@ export const displayComparisonResults = (comparison: BillComparisonResult): void
     }
 
     // Totals summary
-    console.log('\n📈 COST TOTALS (across ' + comparison.comparisons.length + ' months)');
+    console.log('\n');
+    console.log('📈 COST TOTALS (across ' + comparison.comparisons.length + ' months)');
     console.log(`Total Actual: ¥${comparison.totalActualCost.toLocaleString()} | Total Calculated: ¥${comparison.totalCalculatedCost.toLocaleString()}`);
     const switchEmoji = comparison.totalSavingsOnSimple >= 0 ? '✅' : '❌';
     const moreOrLess = comparison.totalSavingsOnSimple >= 0 ? 'less' : 'more';
     console.log(`${switchEmoji} If you had switched to Simple Octopus, you would have paid ¥${Math.abs(comparison.totalSavingsOnSimple).toLocaleString()} ${moreOrLess} (${comparison.totalSavingsPercentage.toFixed(2)}%)`);
-    console.log('\n')
 
     // Carbon impact analysis
     const currentIntensity = calculateCurrentTariffCarbonIntensity();
     const simpleIntensity = calculateSimpleTariffCarbonIntensity();
     const percentageDifference = ((currentIntensity - simpleIntensity) / currentIntensity) * 100;
+    console.log('\n')
     console.log('💨 CARBON IMPACT (across ' + comparison.comparisons.length + ' months)');
     console.log(`Carbon Intensity: Standard Tariff: ${currentIntensity} gCO2/kWh | Simple Tariff: ${simpleIntensity} gCO2/kWh (${percentageDifference.toFixed(1)}%)`);
     console.log(`Total Current Tariff: ${Math.round(comparison.totalCurrentTariffCarbon).toLocaleString()}g CO2 | Total Simple Tariff: ${Math.round(comparison.totalSimpleTariffCarbon).toLocaleString()}g CO2`);
