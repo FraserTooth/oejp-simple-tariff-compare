@@ -1,6 +1,55 @@
 import prompts from 'prompts';
+import { DateTime } from 'luxon';
 
-export const getQuotedRate = async (): Promise<number> => {
+/**
+ * Renewable energy surcharge data
+ * Source: https://pps-net.org/statistics/renewable
+ */
+export interface RenewableEnergySurcharge {
+    fiscalYear: number; // Fiscal year (e.g., 2021 for 2021年度)
+    startDate: DateTime; // Start date at midnight JST (inclusive)
+    endDate: DateTime; // End date at midnight JST (exclusive)
+    rateYenPerKwh: number; // Surcharge rate in yen/kWh
+}
+
+/**
+ * Renewable energy surcharge table by fiscal year
+ * Reference: https://pps-net.org/statistics/renewable
+ */
+export const renewableEnergySurchargeTable: RenewableEnergySurcharge[] = [
+    {
+        fiscalYear: 2021,
+        startDate: DateTime.fromISO('2021-05-01T00:00:00', { zone: 'Asia/Tokyo' }),
+        endDate: DateTime.fromISO('2022-05-01T00:00:00', { zone: 'Asia/Tokyo' }),
+        rateYenPerKwh: 3.36,
+    },
+    {
+        fiscalYear: 2022,
+        startDate: DateTime.fromISO('2022-05-01T00:00:00', { zone: 'Asia/Tokyo' }),
+        endDate: DateTime.fromISO('2023-05-01T00:00:00', { zone: 'Asia/Tokyo' }),
+        rateYenPerKwh: 3.45,
+    },
+    {
+        fiscalYear: 2023,
+        startDate: DateTime.fromISO('2023-05-01T00:00:00', { zone: 'Asia/Tokyo' }),
+        endDate: DateTime.fromISO('2024-05-01T00:00:00', { zone: 'Asia/Tokyo' }),
+        rateYenPerKwh: 1.40,
+    },
+    {
+        fiscalYear: 2024,
+        startDate: DateTime.fromISO('2024-05-01T00:00:00', { zone: 'Asia/Tokyo' }),
+        endDate: DateTime.fromISO('2025-05-01T00:00:00', { zone: 'Asia/Tokyo' }),
+        rateYenPerKwh: 3.49,
+    },
+    {
+        fiscalYear: 2025,
+        startDate: DateTime.fromISO('2025-05-01T00:00:00', { zone: 'Asia/Tokyo' }),
+        endDate: DateTime.fromISO('2026-05-01T00:00:00', { zone: 'Asia/Tokyo' }),
+        rateYenPerKwh: 3.98,
+    },
+];
+
+export const getSimpleTariffRate = async (): Promise<number> => {
     // Check environment variable first (for development/automation)
     const envRate = process.env.SIMPLE_RATE;
 
@@ -38,4 +87,17 @@ export const getQuotedRate = async (): Promise<number> => {
     }
 
     return rate;
+};
+
+export const getRenewableSurcharge = (billReadingEndDate: DateTime): number => {
+    // Look up renewable energy surcharge for this reading end date
+    const surcharge = renewableEnergySurchargeTable.find(
+        (entry) => billReadingEndDate >= entry.startDate && billReadingEndDate < entry.endDate
+    );
+
+    if (surcharge) {
+        return surcharge.rateYenPerKwh;
+    } else {
+        throw new Error(`No renewable energy surcharge data found for reading end date ${billReadingEndDate.toISO()}`);
+    }
 };

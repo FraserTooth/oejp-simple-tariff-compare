@@ -4,6 +4,8 @@ export type BillComparison = {
     toDate: string;
     totalKwh: number;
     actualPreTaxCost: number;
+    renewableSurchargeRateYenPerKwh: number;
+    renewableSurchargeCost: number;
     calculatedCost: number;
     savings: number;
     savingsPercentage: number;

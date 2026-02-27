@@ -4,7 +4,7 @@ import { Command } from 'commander';
 import { getOEJPAuthToken } from './queries/auth';
 import { getAccountNumber } from './queries/account';
 import { getBillInformation } from './queries/bills';
-import { getQuotedRate } from './queries/rate';
+import { getSimpleTariffRate } from './queries/rate';
 import { calculateBillComparison } from './processing/comparison';
 import { displayComparisonResults } from './processing/display';
 
@@ -13,10 +13,10 @@ const runComparison = async (): Promise<void> => {
     const token = await getOEJPAuthToken();
     const accountNumber = await getAccountNumber(token);
     const bills = await getBillInformation(token, accountNumber);
-    const rate = await getQuotedRate();
+    const simpleRate = await getSimpleTariffRate();
 
     // Calculate and display bill comparison
-    const comparison = calculateBillComparison(bills, rate);
+    const comparison = calculateBillComparison(bills, simpleRate);
     displayComparisonResults(comparison);
   } catch (error) {
     console.error('❌ Process Failed', error);
