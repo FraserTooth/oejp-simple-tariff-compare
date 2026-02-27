@@ -28,8 +28,8 @@ export const calculateBillComparison = (bills: BillInformation[], simpleRate: nu
         // Calculate total cost: base rate + renewable surcharge
         const calculatedCost = (bill.totalKwh * simpleRate) + renewableSurchargeCost;
         const savings = bill.preTaxCost - calculatedCost;
-        const savingsPercentage = (savings / bill.preTaxCost) * 100;
-        const isOverpaying = bill.preTaxCost > calculatedCost;
+        const savingsPercentage = (savings / bill.preTaxCost) * -100;
+        const simpleIsSaving = bill.preTaxCost > calculatedCost;
 
         // Calculate carbon emissions
         const currentTariffCarbon = bill.totalKwh * CURRENT_TARIFF_CARBON_INTENSITY;
@@ -47,7 +47,7 @@ export const calculateBillComparison = (bills: BillInformation[], simpleRate: nu
             calculatedCost,
             savings,
             savingsPercentage,
-            isOverpaying,
+            wouldHaveSaved: simpleIsSaving,
             currentTariffCarbon,
             simpleTariffCarbon,
             carbonSavings,
@@ -63,8 +63,8 @@ export const calculateBillComparison = (bills: BillInformation[], simpleRate: nu
         totalSimpleTariffCarbon += simpleTariffCarbon;
     }
 
-    const totalSavings = totalCalculatedCost - totalActualCost;
-    const totalSavingsPercentage = (totalSavings / totalActualCost) * 100;
+    const totalSavingsOnSimple = totalActualCost - totalCalculatedCost;
+    const totalSavingsPercentage = (totalSavingsOnSimple / totalActualCost) * -100;
     const totalCarbonSavings = totalCurrentTariffCarbon - totalSimpleTariffCarbon;
 
     return {
@@ -74,7 +74,7 @@ export const calculateBillComparison = (bills: BillInformation[], simpleRate: nu
         comparisons,
         totalActualCost,
         totalCalculatedCost,
-        totalSavings,
+        totalSavingsOnSimple,
         totalSavingsPercentage,
         totalCurrentTariffCarbon,
         totalSimpleTariffCarbon,

@@ -62,7 +62,8 @@ export const getSimpleTariffRate = async (): Promise<number> => {
     }
 
     // Fall back to interactive prompt
-    console.log('💰 Enter your quoted simple tariff rate\n');
+    // Note: Renewable energy surcharge is automatically added based on billing date
+    console.log('💰 Enter your quoted simple tariff rate (renewable surcharge will be added automatically)\n');
 
     const response = await prompts({
         type: 'text',

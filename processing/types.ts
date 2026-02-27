@@ -9,7 +9,7 @@ export type BillComparison = {
     calculatedCost: number;
     savings: number;
     savingsPercentage: number;
-    isOverpaying: boolean;
+    wouldHaveSaved: boolean;
     currentTariffCarbon: number;
     simpleTariffCarbon: number;
     carbonSavings: number;
@@ -22,7 +22,7 @@ export type BillComparisonResult = {
     comparisons: BillComparison[];
     totalActualCost: number;
     totalCalculatedCost: number;
-    totalSavings: number;
+    totalSavingsOnSimple: number;
     totalSavingsPercentage: number;
     totalCurrentTariffCarbon: number;
     totalSimpleTariffCarbon: number;
